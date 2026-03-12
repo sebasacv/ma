@@ -1,9 +1,395 @@
+
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>My Site</title>
-  </head>
-  <body>
-    <h1>It works!</h1>
-  </body>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto M&A — Tech Diligence for M&A</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-soft: #1a3a5c;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --accent-pale: #dbeafe;
+    --teal: #0f766e;
+    --teal-pale: #ccfbf1;
+    --purple: #6d28d9;
+    --purple-pale: #ede9fe;
+    --text: #0f172a;
+    --text-mid: #334155;
+    --text-soft: #64748b;
+    --border: #e2e8f0;
+    --surface: #f8fafc;
+    --white: #ffffff;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: var(--white); line-height: 1.6; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .nav-logo { font-size: 18px; font-weight: 700; color: var(--navy); letter-spacing: -0.5px; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 14px; color: var(--text-soft); text-decoration: none; font-weight: 500; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+  .hero { background: var(--navy); color: white; padding: 100px 2rem 80px; text-align: center; }
+  .hero-badge { display: inline-block; background: rgba(37,99,235,0.25); color: #93c5fd; border: 1px solid rgba(37,99,235,0.4); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 24px; text-transform: uppercase; }
+  .hero h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; max-width: 800px; margin: 0 auto 20px; }
+  .hero h1 em { color: #60a5fa; font-style: normal; }
+  .hero-sub { font-size: clamp(16px, 2vw, 20px); color: #94a3b8; max-width: 560px; margin: 0 auto 40px; line-height: 1.6; }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer; }
+  .btn-ghost { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); padding: 14px 28px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 500; cursor: pointer; }
+  .hero-stats { display: flex; gap: 48px; justify-content: center; margin-top: 64px; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 32px; font-weight: 800; color: white; letter-spacing: -1px; }
+  .stat-label { font-size: 13px; color: #64748b; margin-top: 4px; }
+
+  section { padding: 80px 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 12px; }
+  .section-title { font-size: clamp(24px, 3vw, 36px); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .section-sub { font-size: 17px; color: var(--text-soft); max-width: 600px; line-height: 1.7; }
+
+  .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 48px; }
+  .problem-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .problem-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .problem-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .problem-card p { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+
+  .how-section { background: var(--navy); color: white; padding: 80px 2rem; }
+  .how-inner { max-width: 1100px; margin: 0 auto; }
+  .how-section .section-label { color: #60a5fa; }
+  .how-section .section-title { color: white; }
+  .how-section .section-sub { color: #94a3b8; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; margin-top: 56px; position: relative; }
+  .step { text-align: center; padding: 0 24px; position: relative; }
+  .step:not(:last-child)::after { content: '→'; position: absolute; right: -10px; top: 18px; color: #334155; font-size: 20px; }
+  .step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: white; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .step h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: white; }
+  .step p { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+  .privacy-callout { margin-top: 48px; background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); border-radius: var(--radius); padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px; }
+  .privacy-icon { width: 36px; height: 36px; background: rgba(37,99,235,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .privacy-callout h4 { font-size: 15px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .privacy-callout p { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+
+  .tiers-section { background: var(--surface); padding: 80px 2rem; }
+  .tiers-inner { max-width: 1100px; margin: 0 auto; }
+  .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 48px; }
+  .tier-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; }
+  .tier-card.featured { border: 2px solid var(--accent); }
+  .tier-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 16px; }
+  .tier-name { font-size: 13px; font-weight: 600; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .tier-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.3px; }
+  .tier-deal { font-size: 13px; color: var(--text-soft); margin-bottom: 20px; }
+  .tier-price { font-size: 30px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
+  .tier-price-sub { font-size: 12px; color: var(--text-soft); margin-bottom: 24px; }
+  .tier-divider { border: none; border-top: 1px solid var(--border); margin: 0 0 20px; }
+  .tier-depth { margin-bottom: 20px; }
+  .tier-depth-label { font-size: 11px; color: var(--text-soft); margin-bottom: 6px; font-weight: 500; }
+  .depth-track { height: 4px; background: var(--border); border-radius: 2px; }
+  .depth-fill { height: 4px; border-radius: 2px; }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .feature-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
+  .feature-check { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .feature-item strong { display: block; font-weight: 600; font-size: 13px; }
+  .feature-item span { font-size: 12px; color: var(--text-soft); }
+  .tier-value { background: var(--surface); border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 20px; font-size: 12px; color: var(--text-soft); line-height: 1.6; border-left: 3px solid var(--border); }
+  .tier-cta { margin-top: 20px; width: 100%; padding: 12px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
+
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 48px; }
+  .why-card { padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
+  .why-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .why-card p { font-size: 13px; color: var(--text-soft); line-height: 1.6; }
+
+  .cta-section { background: var(--navy); color: white; padding: 80px 2rem; text-align: center; }
+  .cta-section h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
+  .cta-section p { font-size: 17px; color: #94a3b8; max-width: 500px; margin: 0 auto 36px; }
+  .cta-form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .cta-input { padding: 12px 18px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: white; font-size: 15px; width: 280px; outline: none; }
+  .cta-input::placeholder { color: #64748b; }
+
+  footer { border-top: 1px solid var(--border); padding: 32px 2rem; text-align: center; font-size: 13px; color: var(--text-soft); }
+  footer strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Auto <span>M&amp;A</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#tiers">Pricing</a></li>
+    <li><a href="#why">Why us</a></li>
+  </ul>
+  <button class="nav-cta">Request a demo</button>
+</nav>
+
+<section class="hero" style="max-width:100%;">
+  <div class="hero-badge">Tech diligence for M&A</div>
+  <h1>See what's really inside<br><em>before you close</em></h1>
+  <p class="hero-sub">Automated code review with analyst-verified findings. We look at the seller's actual codebase — you get a sanitized, investment-grade assessment. No source code shared. No guesswork.</p>
+  <div class="hero-actions">
+    <button class="btn-primary">Request a demo</button>
+    <button class="btn-ghost">See sample report</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">3–7</div><div class="stat-label">days to delivery</div></div>
+    <div class="stat"><div class="stat-num">25–40%</div><div class="stat-label">of Big Four cost</div></div>
+    <div class="stat"><div class="stat-num">$10M–$1B</div><div class="stat-label">deal size range</div></div>
+    <div class="stat"><div class="stat-num">0</div><div class="stat-label">lines of code shared with buyer</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">The problem</div>
+  <h2 class="section-title">Mid-market tech diligence is broken</h2>
+  <p class="section-sub">Buyers are flying blind. Sellers are paranoid. And everyone is cobbling together spreadsheets and NDAs.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon" style="background:#fee2e2;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3L3 17h14L10 3z" stroke="#ef4444" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 8v4M10 14h.01" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <h3>Buyers can't see the code</h3>
+      <p>Sellers won't open up their codebase to a counterparty. You're making a multi-million dollar bet on a vague tech description and a few engineer interviews.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon" style="background:#fef3c7;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#d97706" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="#d97706" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <h3>Big Four is too slow and expensive</h3>
+      <p>A traditional tech diligence engagement costs $80K–$400K and takes 6–8 weeks. Most mid-market deals don't have that kind of budget or timeline.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon" style="background:#ede9fe;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="10" rx="2" stroke="#7c3aed" stroke-width="1.5"/><path d="M7 9h6M7 12h4" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <h3>Self-reported data isn't credible</h3>
+      <p>Asking the seller to fill a questionnaire about their own tech stack is like asking a car dealer to write the inspection report. The incentives are wrong.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon" style="background:#dcfce7;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M10 5l5 5-5 5" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Integration surprises kill value</h3>
+      <p>Post-close tech integration is where deals fall apart. Without a real assessment upfront, you're discovering the hard problems after you've already paid.</p>
+    </div>
+  </div>
+</section>
+
+<div class="how-section" id="how">
+  <div class="how-inner">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">We look. You decide.</h2>
+    <p class="section-sub">We act as a trusted third party — we see the code, you get the insight. The seller's IP never leaves our secure environment.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Secure access granted</h3>
+        <p>Seller provides read-only access to their code repositories in our isolated, audited environment.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Automated scan runs</h3>
+        <p>Our tooling analyzes stack composition, dependencies, vulnerabilities, architecture patterns, and code quality signals.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Analysts review findings</h3>
+        <p>Our team reviews raw output, validates signals, and removes any code-level detail before it leaves our environment.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Buyer gets the report</h3>
+        <p>You receive a structured, analyst-reviewed assessment — risks rated, integration effort scored, red flags surfaced. No raw code. No IP.</p>
+      </div>
+    </div>
+    <div class="privacy-callout">
+      <div class="privacy-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L3 5v5c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V5L9 2z" stroke="#60a5fa" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.5 9l2 2 3-3" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <h4>Privacy-preserving by design</h4>
+        <p>The buyer never sees source code, schema details, or architecture diagrams. Auto M&amp;A acts as a neutral intermediary — our findings are our own analysis, not a copy of the seller's IP. Both parties sign our standard tri-party NDA before any access is granted.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tiers-section" id="tiers">
+  <div class="tiers-inner">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">One job, three depths</h2>
+    <p class="section-sub" style="color:var(--text-soft);">Every tier analyzes the same thing — the target's actual codebase. The difference is how deep we go.</p>
+    <div class="tiers-grid">
+
+      <div class="tier-card">
+        <div class="tier-name">Tier 1</div>
+        <div class="tier-title">Tech health snapshot</div>
+        <div class="tier-deal">Deals $10M – $50M &nbsp;·&nbsp; Search funds, SMB acquirers</div>
+        <div class="tier-price" style="color:#1d4ed8;">$5K – $12K</div>
+        <div class="tier-price-sub">per engagement &nbsp;·&nbsp; delivered in 3–5 days</div>
+        <hr class="tier-divider">
+        <div class="tier-depth">
+          <div class="tier-depth-label">Analysis depth</div>
+          <div class="depth-track"><div class="depth-fill" style="width:25%;background:#1d4ed8;"></div></div>
+        </div>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-check" style="background:#dbeafe;color:#1d4ed8;">✓</span>
+            <div><strong>Stack classification & scoring</strong><span>Tech age, framework currency, cloud vs. on-prem, scalability ceiling</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#dbeafe;color:#1d4ed8;">✓</span>
+            <div><strong>Vulnerability & license scan</strong><span>Known CVEs, dependency risks, open-source license compliance</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#dbeafe;color:#1d4ed8;">✓</span>
+            <div><strong>Buyer compatibility flag</strong><span>High-level tech overlap or conflict with buyer's known stack</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#dbeafe;color:#1d4ed8;">✓</span>
+            <div><strong>Red flag summary report</strong><span>2–3 page analyst-reviewed PDF, risk-rated, no code references</span></div>
+          </li>
+        </ul>
+        <div class="tier-value">Replaces 30–40hrs of manual tech review at junior consultant rates, delivered in days not weeks.</div>
+        <button class="tier-cta" style="background:#dbeafe;color:#1d4ed8;">Get started</button>
+      </div>
+
+      <div class="tier-card featured">
+        <div><span class="tier-badge" style="background:#dbeafe;color:#1d4ed8;">Most popular</span></div>
+        <div class="tier-name">Tier 2</div>
+        <div class="tier-title">Architecture & risk assessment</div>
+        <div class="tier-deal">Deals $50M – $250M &nbsp;·&nbsp; PE firms, independent sponsors</div>
+        <div class="tier-price" style="color:#0f766e;">$15K – $40K</div>
+        <div class="tier-price-sub">per engagement &nbsp;·&nbsp; delivered in 5–10 days</div>
+        <hr class="tier-divider">
+        <div class="tier-depth">
+          <div class="tier-depth-label">Analysis depth</div>
+          <div class="depth-track"><div class="depth-fill" style="width:60%;background:#0f766e;"></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-soft);margin-bottom:12px;">Everything in Tier 1, plus:</div>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ccfbf1;color:#0f766e;">+</span>
+            <div><strong>Architecture quality analysis</strong><span>Code modularity, coupling score, test coverage, CI/CD maturity</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ccfbf1;color:#0f766e;">+</span>
+            <div><strong>Technical debt quantification</strong><span>Remediation cost buckets across security, scalability, maintainability</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ccfbf1;color:#0f766e;">+</span>
+            <div><strong>Integration effort estimate</strong><span>API surface, data model complexity, auth compatibility — scored by workstream</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ccfbf1;color:#0f766e;">+</span>
+            <div><strong>Customer concentration signal</strong><span>Usage patterns from codebase to triangulate revenue concentration</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ccfbf1;color:#0f766e;">+</span>
+            <div><strong>Deep compatibility map</strong><span>Workstream-level friction points without exposing seller architecture</span></div>
+          </li>
+        </ul>
+        <div class="tier-value">Big Four charges $80K–$150K for this scope. We deliver the critical 80% in 1–2 weeks at 25–40% of the cost.</div>
+        <button class="tier-cta" style="background:#0f766e;color:white;">Get started</button>
+      </div>
+
+      <div class="tier-card">
+        <div class="tier-name">Tier 3</div>
+        <div class="tier-title">Full forensic review</div>
+        <div class="tier-deal">Deals $250M – $1B &nbsp;·&nbsp; Mid-market PE, strategic acquirers</div>
+        <div class="tier-price" style="color:#5b21b6;">$50K – $100K</div>
+        <div class="tier-price-sub">per engagement &nbsp;·&nbsp; delivered in 10–15 days</div>
+        <hr class="tier-divider">
+        <div class="tier-depth">
+          <div class="tier-depth-label">Analysis depth</div>
+          <div class="depth-track"><div class="depth-fill" style="width:95%;background:#5b21b6;"></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-soft);margin-bottom:12px;">Everything in Tier 2, plus:</div>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ede9fe;color:#5b21b6;">+</span>
+            <div><strong>Full customer concentration analysis</strong><span>Cross-referenced across code, contracts, and financial data</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ede9fe;color:#5b21b6;">+</span>
+            <div><strong>Scalability stress modelling</strong><span>3x–10x growth headroom, bottlenecks, infra cost curve projection</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ede9fe;color:#5b21b6;">+</span>
+            <div><strong>Security & compliance deep scan</strong><span>OWASP top 10, SOC2/GDPR readiness, secrets exposure audit</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ede9fe;color:#5b21b6;">+</span>
+            <div><strong>Engineering team signals</strong><span>Bus factor, key contributor dependency from repo metadata</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ede9fe;color:#5b21b6;">+</span>
+            <div><strong>Post-close integration support</strong><span>30-day advisory access to help plan integration workstreams</span></div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-check" style="background:#ede9fe;color:#5b21b6;">+</span>
+            <div><strong>IC-ready diligence deck</strong><span>Risk matrix, findings summary, reps & warranties recommendations</span></div>
+          </li>
+        </ul>
+        <div class="tier-value">Replaces $200K–$400K of Big Four tech diligence. Post-close advisory included. One vendor, one NDA, one week faster.</div>
+        <button class="tier-cta" style="background:#ede9fe;color:#5b21b6;">Get started</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<section id="why">
+  <div class="section-label">Why Auto M&amp;A</div>
+  <h2 class="section-title">The only firm that actually reads the code</h2>
+  <p class="section-sub">Every other tech diligence provider either asks the seller to self-report, or charges enterprise prices. We do neither.</p>
+  <div class="why-grid">
+    <div class="why-card">
+      <h3>Real code, not self-reports</h3>
+      <p>We run automated scans against the actual repository. Our findings are based on what the code does, not what the seller says it does.</p>
+    </div>
+    <div class="why-card">
+      <h3>Privacy-preserving by default</h3>
+      <p>No source code ever reaches the buyer. We act as a neutral third party — our output is our analysis, not a copy of the seller's IP.</p>
+    </div>
+    <div class="why-card">
+      <h3>Mid-market priced</h3>
+      <p>We're built for deals where Big Four fees don't make sense. Serious analysis at 25–40% of traditional tech diligence cost.</p>
+    </div>
+    <div class="why-card">
+      <h3>Days, not months</h3>
+      <p>Our automated infrastructure means findings in 3–15 days depending on tier — not the 6–8 week timeline of a traditional engagement.</p>
+    </div>
+    <div class="why-card">
+      <h3>Integration-first thinking</h3>
+      <p>We don't just flag risks. We score integration effort by workstream so you know what post-close looks like before you sign.</p>
+    </div>
+    <div class="why-card">
+      <h3>One NDA, both sides covered</h3>
+      <p>Our standard tri-party agreement protects the seller's IP and gives the buyer confidence in the findings. No legal back-and-forth.</p>
+    </div>
+  </div>
+</section>
+
+<div class="cta-section">
+  <h2>Ready to see inside?</h2>
+  <p>Get a sample report or talk to our team about your next deal.</p>
+  <div class="cta-form">
+    <input class="cta-input" type="email" placeholder="Your work email">
+    <button class="btn-primary">Request access</button>
+  </div>
+</div>
+
+<footer>
+  <strong>Auto M&amp;A</strong> &nbsp;·&nbsp; Tech diligence for M&A &nbsp;·&nbsp; contact@automa.io
+</footer>
+
+</body>
 </html>
